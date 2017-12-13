@@ -2,31 +2,33 @@ var scores, roundScore, activePlayer, gamePlaying, lastDice, maxValue;
 
 init();
 
+let promasio = false;
 document.querySelector('.btn-roll').addEventListener('click', function(){
-    if(gamePlaying) {
+    if(gamePlaying  && promasio == false) {
         var dice = Math.floor(Math.random() * 6) + 1;
         var dice2 = Math.floor(Math.random() * 6) + 1;
         document.querySelector('.dice1').style.display = 'block';
         document.querySelector('.dice2').style.display = 'block';
         document.querySelector('.dice1').src = 'dice-' + dice + '.png';
         document.querySelector('.dice2').src = 'dice-' + dice2 + '.png';
-        if(dice === 6 && dice2 === 6) {
-            scores[activePlayer] = 0;
-            document.getElementById("score-" + activePlayer).textContent = scores[activePlayer];
-            nextPlayer();
-        }
+        // if(dice === 6 && dice2 === 6) {
+            // scores[activePlayer] = 0;
+            // document.getElementById("score-" + activePlayer).textContent = scores[activePlayer];
+            // nextPlayer();
+        // }
         if (dice !== 1 && dice2 !== 1) {
             lastDice = dice + dice2;
             roundScore += dice + dice2;
             document.getElementById('current-' + activePlayer).textContent = roundScore;
         } else {
-            nextPlayer();
+			promasio = true;
+			setTimeout(nextPlayer, 1000);
         }
     }
 });
 
 document.querySelector(".btn-hold").addEventListener("click", function(){
-    if(gamePlaying) {
+    if(gamePlaying & promasio == false) {
         scores[activePlayer] += roundScore;
         document.getElementById("score-" + activePlayer).textContent = scores[activePlayer];
         if(scores[activePlayer] >= maxValue){
@@ -42,6 +44,7 @@ document.querySelector(".btn-hold").addEventListener("click", function(){
 });
 
 function nextPlayer(){
+	promasio = false;
     lastDice = 0;
     activePlayer  === 0 ? activePlayer = 1 : activePlayer = 0;
     roundScore = 0;
